@@ -1,11 +1,6 @@
 package mi.yxz.mizu.dto
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-
-enum class ManifestMediaType(val value: String) {
-
-}
 
 @Serializable
 data class ImageManifestV2(

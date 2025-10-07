@@ -10,17 +10,16 @@ import java.util.UUID
 /**
  * @param uuid
  * @param name
+ * @param uploadTempPath
  * @param receivedSize
- * @param receivedChunks
  * @param status
  * */
 @Serializable
 data class Session(
     val uuid: String,
     val name: String,
-    val path: String,
+    val uploadTempPath: String,
     var receivedSize: Long = 0,
-    var receivedChunks: MutableList<ByteArray> = mutableListOf(),
     var status: Status = Status.UPLOADING
 )
 enum class Status {
@@ -28,17 +27,20 @@ enum class Status {
 }
 
 interface BlobService{
-    fun createUploadSession(name: String): Session
+    fun createUploadSession(name: String): Session?
     fun findUploadSession(uuid: String): Boolean
     fun getUploadSession(uuid: String): Session?
-    fun appendChunk(uuid: String, name: String,inputStream: InputStream)
+    fun appendChunk(uuid: String, name: String, inputStream: InputStream): Long
     fun deleteUploadSession(uuid: String)
-    fun findBlobByDigest(digest: String): Boolean
+    fun completeUploadSession(uuid: String)
     fun getBlobByDigest(digest: String): File?
-    fun deleteBlob(digest: String)
+    fun blobExists(digest: String): Boolean
+    fun deleteBlob(digest: String): Boolean
     fun checkBlobLink(digest: String)
-    fun saveBlob(digest: String, blob: File)
+    fun saveBlob(digestHex: String, blob: File)
     fun clearUploadedTempFiles(uuid: String, name: String)
     fun getTempFile(uuid: String, name: String): File?
     fun getRedirectUrl(name: String, digest: String): String?
+    fun checkRepository(repo: String): Boolean
+    fun ensureRepositoryDirectoryExist(repo: String)
 }

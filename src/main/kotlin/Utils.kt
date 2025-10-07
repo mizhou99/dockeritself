@@ -31,4 +31,11 @@ object Utils {
         val hex = bytes.joinToString("") { it -> "%02x".format(it) }
         return hex
     }
+    @Throws(IOException::class, NoSuchAlgorithmException::class)
+    fun calculateBytesSha256(byteArray: ByteArray): String {
+        val md = MessageDigest.getInstance("SHA-256")
+        val bytes = md.digest(byteArray)
+        val hex = bytes.joinToString("") { it -> "%02x".format(it) }
+        return hex
+    }
 }
